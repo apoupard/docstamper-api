@@ -1,0 +1,8 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+rootProject.name = "docstamper-api"
+
+include 'docstampr-api-rest'

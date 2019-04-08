@@ -1,0 +1,57 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.21'
+}
+
+repositories {
+    maven {url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'}
+    mavenLocal()
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+ext {
+    bouncycastleVersion = '1.61'
+
+    okhttpVersion = '3.14.0'
+    retrofitVersion = '2.5.0'
+}
+
+dependencies {
+
+//    implementation "org.civis.blockchain.ssm:ssm-sdk-core:0.0.1-SNAPSHOT"
+    implementation files('libs/ssm-sdk-core-0.0.1-SNAPSHOT.jar')
+    implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
+    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+    implementation 'io.springfox:springfox-swagger2:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
+}

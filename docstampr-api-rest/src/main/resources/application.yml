@@ -1,0 +1,15 @@
+ssm:
+  name: docstamper
+  coop:
+    rest:
+      url: http://localhost:9090
+  signer:
+    admin:
+      name: adam
+      file: file:./infra/network-it/util/adam
+    user:
+      name: bob
+      file: file:./infra/network-it/util/bob
+
+server:
+  port : 8888
