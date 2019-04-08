@@ -4,10 +4,12 @@ import org.civis.blockchain.docstamper.api.rest.hash.HashCommand
 import org.civis.blockchain.docstamper.api.rest.hash.HashQuery
 import org.civis.blockchain.ssm.client.domain.SessionState
 import org.civis.blockchain.ssm.client.repository.InvokeReturn
-import org.springframework.http.MediaType
+import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.concurrent.CompletableFuture
+
+
 
 @RestController
 class HashApi(val hashQuery: HashQuery,
@@ -22,8 +24,10 @@ class HashApi(val hashQuery: HashQuery,
     @PostMapping("/hashes")
     fun createSession(@RequestBody hash: String): CompletableFuture<InvokeReturn>? = hashCommand.create(hash)
 
-    @PostMapping("/hashes/{hash}/metadata", consumes = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
-    fun updateFile(@PathVariable hash: String, @RequestBody metadata: String): CompletableFuture<InvokeReturn>
+    @PostMapping("/hashes/{hash}/metadata")
+    fun updateFile(@PathVariable hash: String, @ModelAttribute metadata: UploadForm): CompletableFuture<InvokeReturn>
             = hashCommand.addMetadata(hash, metadata)
+
+    data class UploadForm(val tags : String, val file: FilePart);
 
 }

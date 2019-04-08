@@ -1,7 +1,9 @@
 package org.civis.blockchain.docstamper.api.rest.hash
 
+import org.civis.blockchain.docstamper.api.rest.HashApi
 import org.civis.blockchain.docstamper.api.rest.config.SsmConfig
 import org.civis.blockchain.ssm.client.SsmClient
+import org.civis.blockchain.ssm.client.Utils.JsonUtils
 import org.civis.blockchain.ssm.client.domain.Context
 import org.civis.blockchain.ssm.client.domain.Session
 import org.civis.blockchain.ssm.client.repository.InvokeReturn
@@ -25,7 +27,8 @@ class HashCommand(val hashQuery: HashQuery,
         return ssmClient.start(admin, session)
     }
 
-    fun addMetadata(hash: String, @RequestBody metadata: String): CompletableFuture<InvokeReturn> {
+    fun addMetadata(hash: String, @RequestBody metadata: HashApi.UploadForm): CompletableFuture<InvokeReturn> {
+        val metadata = JsonUtils.toJson(Metadata(metadata.tags));
         val context = Context(hash, metadata, getIteration(hash));
         return ssmClient.perform(ssmConfig.userSigner(), "SetMetadata", context)
     }
@@ -35,5 +38,6 @@ class HashCommand(val hashQuery: HashQuery,
         return session.map { it.iteration }.orElse(0)
     }
 
+    data class Metadata(val tags : String, val url: String?= null);
 
 }
