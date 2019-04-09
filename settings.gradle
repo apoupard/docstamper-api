@@ -3,6 +3,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "docstamper-api"
+rootProject.name = "docstampr-api"
 
 include 'docstampr-api-rest'

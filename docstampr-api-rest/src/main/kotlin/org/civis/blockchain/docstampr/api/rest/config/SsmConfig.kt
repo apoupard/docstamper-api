@@ -10,6 +10,9 @@ class SsmConfig {
     @Value("\${docstampr.git.repo}")
     lateinit var docstamprGitRepo: String
 
+    @Value("\${docstampr.git.key}")
+    lateinit var docstamprGitKey: String
+
     @Value("\${ssm.coop.rest.url}")
     lateinit var coopRestUrl: String
 

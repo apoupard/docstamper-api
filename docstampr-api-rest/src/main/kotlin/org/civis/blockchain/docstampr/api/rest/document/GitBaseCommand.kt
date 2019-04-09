@@ -19,9 +19,11 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 
-class GitBaseCommand(docstamprGitRepo: String) {
+class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
 
-    private val repo = getRepo(docstamprGitRepo)
+    private val repo : Git = getRepo(docstamprGitRepo)
+
+    private val sshSessionFactory: SshSessionFactory = jschConfigSessionFactory(keyGitRepo)
 
     fun workTree(): File {
         return repo.repository.workTree
@@ -89,22 +91,24 @@ class GitBaseCommand(docstamprGitRepo: String) {
                 .call()
     }
 
-    var sshSessionFactory: SshSessionFactory = object : JschConfigSessionFactory() {
-        override fun configure(hc: Host?, session: Session?) {
-        }
-
-        @Throws(JSchException::class)
-        override fun createDefaultJSch(fs: FS): JSch {
-            val defaultJSch = super.createDefaultJSch(fs)
-            defaultJSch.addIdentity("/Users/apo/dev/smartb/git/docstampr-api/infra/id_rsa.github")
-            return defaultJSch
-        }
-
-    }
-
     private fun getRepo(docstamprGitRepo: String): Git {
         val url = FileUtils.getUrl(docstamprGitRepo)
         return Git.open(File(url.file))
+    }
+
+    private fun jschConfigSessionFactory(keyGitRepo: String): JschConfigSessionFactory {
+        return object : JschConfigSessionFactory() {
+            override fun configure(hc: Host?, session: Session?) {
+            }
+
+            @Throws(JSchException::class)
+            override fun createDefaultJSch(fs: FS): JSch {
+                val defaultJSch = super.createDefaultJSch(fs)
+                val url = FileUtils.getUrl(keyGitRepo)
+                defaultJSch.addIdentity(url.file)
+                return defaultJSch
+            }
+        }
     }
 
 }

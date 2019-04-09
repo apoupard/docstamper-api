@@ -12,6 +12,7 @@ ssm:
       file: file:../infra/network-it/util/bob
 docstampr:
   git:
-    repo: file:../infra/docstampr-file
+    repo: file:../infra/civis-docstampr-file
+    key: file:../infra/bc1/id_rsa.civis.github
 server:
-  port : 8888
+  port : 8889

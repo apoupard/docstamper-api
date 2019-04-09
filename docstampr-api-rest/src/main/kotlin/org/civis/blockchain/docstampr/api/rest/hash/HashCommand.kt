@@ -40,7 +40,7 @@ class HashCommand(val hashQuery: HashQuery,
     private fun uploadToGit(metadata: HashApi.UploadForm, hash: String): String {
         val file = File.createTempFile(metadata.file.filename(), ".temp")
         metadata.file.transferTo(file);
-        return GitUploadDocument(ssmConfig.docstamprGitRepo)
+        return GitUploadDocument(ssmConfig.docstamprGitRepo, ssmConfig.docstamprGitKey)
                 .upload(hash, metadata.file.filename(), FileInputStream(file))
     }
 
