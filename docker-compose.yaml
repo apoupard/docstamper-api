@@ -4,13 +4,15 @@ services:
   docstampr-api-rest:
     image: civisblockchain/docstampr-api-rest
     environment:
-      - coop_rest_url=http://peer0.pr-bc1.civis-blockchain.org:9090
-      - ssm_name=docstampr
-      - signer_admin_name=adrien
-      - signer_admin_file=file:/opt/docstampr/user/adrien
-      - signer_user_name=docstampr
-      - signer_user_file=file:/opt/docstampr/user/docstampr
+      - ssm_name=docstampr-beta
+      - ssm_coop_rest_url=http://peer0.pr-bc1.civis-blockchain.org:9090
+      - ssm_signer_admin_name=adrien
+      - ssm_signer_admin_file=file:/opt/docstampr/user/adrien
+      - ssm_signer_user_name=docstampr
+      - ssm_signer_user_file=file:/opt/docstampr/user/docstampr
+      - docstampr_git_repo=file:/opt/docstampr/civis-docstampr-file
     volumes:
       - ./infra/bc1/user:/opt/docstampr/user
+      - ./infra/bc1/user:/opt/docstampr/user
     ports:
-      - 8888:8888
+      - 8889:8889
