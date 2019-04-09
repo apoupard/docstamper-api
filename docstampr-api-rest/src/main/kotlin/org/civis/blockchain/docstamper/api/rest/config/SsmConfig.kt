@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class SsmConfig {
 
+    @Value("\${docstamper.git.repo}")
+    lateinit var docstamperGitRepo: String
+
     @Value("\${ssm.coop.rest.url}")
     lateinit var coopRestUrl: String
 

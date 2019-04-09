@@ -12,7 +12,7 @@ import java.net.URI
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class WebBaseTest {
+open class WebBaseTest {
 
     @LocalServerPort
     protected lateinit var port: Integer

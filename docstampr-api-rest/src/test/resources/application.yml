@@ -10,6 +10,8 @@ ssm:
     user:
       name: bob
       file: file:../infra/network-it/util/bob
-
+docstamper:
+  git:
+    repo: file:../infra/docstamper-file
 server:
   port : 8888
