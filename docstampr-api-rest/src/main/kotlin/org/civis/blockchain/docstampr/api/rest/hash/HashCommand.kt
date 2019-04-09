@@ -1,8 +1,8 @@
-package org.civis.blockchain.docstamper.api.rest.hash
+package org.civis.blockchain.docstampr.api.rest.hash
 
-import org.civis.blockchain.docstamper.api.document.GitUploadDocument
-import org.civis.blockchain.docstamper.api.rest.HashApi
-import org.civis.blockchain.docstamper.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.document.GitUploadDocument
+import org.civis.blockchain.docstampr.api.rest.HashApi
+import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.Utils.JsonUtils
 import org.civis.blockchain.ssm.client.domain.Context
@@ -25,7 +25,7 @@ class HashCommand(val hashQuery: HashQuery,
             return null;
         }
         val admin = ssmConfig.adminSigner()
-        val roles = hashMapOf(ssmConfig.userSigner().name to "DocStamper")
+        val roles = hashMapOf(ssmConfig.userSigner().name to "DocStampr")
         val session = Session(ssmConfig.ssmName, hash, "", roles)
         return ssmClient.start(admin, session)
     }
@@ -40,7 +40,7 @@ class HashCommand(val hashQuery: HashQuery,
     private fun uploadToGit(metadata: HashApi.UploadForm, hash: String): String {
         val file = File.createTempFile(metadata.file.filename(), ".temp")
         metadata.file.transferTo(file);
-        return GitUploadDocument(ssmConfig.docstamperGitRepo)
+        return GitUploadDocument(ssmConfig.docstamprGitRepo)
                 .upload(hash, metadata.file.filename(), FileInputStream(file))
     }
 

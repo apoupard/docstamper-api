@@ -1,6 +1,6 @@
-package org.civis.blockchain.docstamper.api.rest.hash
+package org.civis.blockchain.docstampr.api.rest.hash
 
-import org.civis.blockchain.docstamper.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.domain.SessionState
 import org.springframework.stereotype.Service

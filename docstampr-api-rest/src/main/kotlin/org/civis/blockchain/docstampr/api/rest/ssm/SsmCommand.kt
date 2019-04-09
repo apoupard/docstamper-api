@@ -1,6 +1,6 @@
-package org.civis.blockchain.docstamper.api.rest.ssm
+package org.civis.blockchain.docstampr.api.rest.ssm
 
-import org.civis.blockchain.docstamper.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.domain.Agent
 import org.civis.blockchain.ssm.client.domain.Ssm
@@ -40,7 +40,7 @@ class SsmCommand(val ssmClient: SsmClient,
 
     private fun getWorkflow(): Ssm {
         return Ssm(ssmConfig.ssmName, listOf(
-                Ssm.Transition(0, 1, "DocStamper", "SetMetadata")
+                Ssm.Transition(0, 1, "DocStampr", "SetMetadata")
         ))
     }
 

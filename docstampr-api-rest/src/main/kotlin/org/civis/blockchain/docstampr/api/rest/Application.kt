@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.rest
+package org.civis.blockchain.docstampr.api.rest
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

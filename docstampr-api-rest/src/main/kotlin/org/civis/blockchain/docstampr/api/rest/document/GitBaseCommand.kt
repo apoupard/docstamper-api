@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.document
+package org.civis.blockchain.docstampr.api.document
 
 import com.google.common.io.ByteStreams
 import com.jcraft.jsch.JSch
@@ -19,9 +19,9 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 
-class GitBaseCommand(docstamperGitRepo: String) {
+class GitBaseCommand(docstamprGitRepo: String) {
 
-    private val repo = getRepo(docstamperGitRepo)
+    private val repo = getRepo(docstamprGitRepo)
 
     fun workTree(): File {
         return repo.repository.workTree
@@ -102,9 +102,8 @@ class GitBaseCommand(docstamperGitRepo: String) {
 
     }
 
-    private fun getRepo(docstamperGitRepo: String): Git {
-        val url = FileUtils.getUrl(docstamperGitRepo)
-
+    private fun getRepo(docstamprGitRepo: String): Git {
+        val url = FileUtils.getUrl(docstamprGitRepo)
         return Git.open(File(url.file))
     }
 

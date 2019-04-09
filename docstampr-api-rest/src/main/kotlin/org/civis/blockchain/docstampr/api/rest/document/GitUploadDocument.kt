@@ -1,10 +1,10 @@
-package org.civis.blockchain.docstamper.api.document
+package org.civis.blockchain.docstampr.api.document
 
 import java.io.FileInputStream
 
-class GitUploadDocument(docstamperGitRepo: String) {
+class GitUploadDocument(docstamprGitRepo: String) {
 
-    val git = GitBaseCommand(docstamperGitRepo);
+    val git = GitBaseCommand(docstamprGitRepo);
 
     fun upload(hash: String, filename: String, data: FileInputStream): String {
 
@@ -12,7 +12,7 @@ class GitUploadDocument(docstamperGitRepo: String) {
         git.commitFile(filename, data)
         git.pushBranch()
         git.checkoutBranch("master")
-        return "https://raw.githubusercontent.com/apoupard/docstamper-file/$hash/${filename}"
+        return "https://raw.githubusercontent.com/civis-blockchain/docstampr-file/$hash/${filename}"
     }
 
 }

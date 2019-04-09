@@ -1,5 +1,5 @@
 ssm:
-  name: docstamper
+  name: docstampr
   coop:
     rest:
       url: http://localhost:9090
@@ -10,8 +10,8 @@ ssm:
     user:
       name: bob
       file: file:../infra/network-it/util/bob
-docstamper:
+docstampr:
   git:
-    repo: file:../infra/docstamper-file
+    repo: file:../infra/docstampr-file
 server:
   port : 8888

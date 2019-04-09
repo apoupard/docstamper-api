@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.rest
+package org.civis.blockchain.docstampr.api.rest
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired

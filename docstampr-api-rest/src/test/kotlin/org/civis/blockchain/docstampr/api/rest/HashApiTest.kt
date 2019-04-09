@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.rest
+package org.civis.blockchain.docstampr.api.rest
 
 import org.assertj.core.api.Assertions.assertThat
 import org.civis.blockchain.ssm.client.domain.Ssm
@@ -41,14 +41,14 @@ class HashApiTest() : WebBaseTest() {
         val uri = baseUrl().path("ssm").build().toUri()
         val res : Ssm? = this.restTemplate.postForObject(uri, HttpEntity(hash), Ssm::class.java)
         assertThat(res).isNotNull
-        assertThat(res!!.name).isEqualTo("docstamper")
+        assertThat(res!!.name).isEqualTo("docstampr")
     }
 
     fun getSsm() {
         val uri = baseUrl().pathSegment("ssm").build().toUri()
         val res = this.restTemplate.getForObject(uri, Ssm::class.java)
         assertThat(res).isNotNull
-        assertThat(res!!.name).isEqualTo("docstamper")
+        assertThat(res!!.name).isEqualTo("docstampr")
     }
 
     fun addHash() {

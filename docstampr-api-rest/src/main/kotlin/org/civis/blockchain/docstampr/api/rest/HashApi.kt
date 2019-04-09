@@ -1,7 +1,7 @@
-package org.civis.blockchain.docstamper.api.rest
+package org.civis.blockchain.docstampr.api.rest
 
-import org.civis.blockchain.docstamper.api.rest.hash.HashCommand
-import org.civis.blockchain.docstamper.api.rest.hash.HashQuery
+import org.civis.blockchain.docstampr.api.rest.hash.HashCommand
+import org.civis.blockchain.docstampr.api.rest.hash.HashQuery
 import org.civis.blockchain.ssm.client.domain.SessionState
 import org.civis.blockchain.ssm.client.repository.InvokeReturn
 import org.springframework.http.codec.multipart.FilePart

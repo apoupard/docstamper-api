@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.document
+package org.civis.blockchain.docstampr.api.document
 
 import org.civis.blockchain.ssm.client.Utils.FileUtils
 import org.junit.jupiter.api.Test
@@ -6,7 +6,7 @@ import java.io.File
 import java.util.*
 
 class GitBaseCommandTest {
-    val repo = "file:../infra/docstamper-file"
+    val repo = "file:../infra/docstampr-file"
     @Test
     fun test_addFile() {
         val uuid = UUID.randomUUID().toString()

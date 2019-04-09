@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.rest.config
+package org.civis.blockchain.docstampr.api.rest.config
 
 import org.civis.blockchain.ssm.client.domain.Signer
 import org.springframework.beans.factory.annotation.Value
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class SsmConfig {
 
-    @Value("\${docstamper.git.repo}")
-    lateinit var docstamperGitRepo: String
+    @Value("\${docstampr.git.repo}")
+    lateinit var docstamprGitRepo: String
 
     @Value("\${ssm.coop.rest.url}")
     lateinit var coopRestUrl: String

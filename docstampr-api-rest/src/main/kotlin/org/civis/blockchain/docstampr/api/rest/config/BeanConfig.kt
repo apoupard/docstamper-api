@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstamper.api.rest.config
+package org.civis.blockchain.docstampr.api.rest.config
 
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.SsmClientConfig
