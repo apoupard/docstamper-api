@@ -26,6 +26,6 @@ class HashApi(val hashQuery: HashQuery,
     fun updateFile(@PathVariable hash: String, @ModelAttribute metadata: UploadForm): CompletableFuture<InvokeReturn>
             = hashCommand.addMetadata(hash, metadata)
 
-    data class UploadForm(val tags : String, val file: FilePart?);
+    data class UploadForm(val metadata : String, val file: FilePart?);
 
 }
