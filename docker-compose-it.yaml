@@ -22,8 +22,8 @@ services:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start -b ${ca__ADMIN}:${ca__PASSWD} -d'
     volumes:
-      - ./infra/network-it/crypto-config/peerOrganizations/bc-coop.bclan/ca/:/etc/hyperledger/ca/
-      - ./infra/network-it/crypto-config/peerOrganizations/bc-coop.bclan/tlsca/:/etc/hyperledger/tlsca/
+      - ./infra/dev/fabric/crypto-config/peerOrganizations/bc-coop.bclan/ca/:/etc/hyperledger/ca/
+      - ./infra/dev/fabric/crypto-config/peerOrganizations/bc-coop.bclan/tlsca/:/etc/hyperledger/tlsca/
     networks:
       - bclannet
 
@@ -46,9 +46,9 @@ services:
     ports:
       - 7050:7050
     volumes:
-        - ./infra/network-it/config/:/etc/hyperledger/config
-        - ./infra/network-it/crypto-config/ordererOrganizations/bclan/orderers/orderer.bclan/msp/:/etc/hyperledger/msp
-        - ./infra/network-it/crypto-config/ordererOrganizations/bclan/orderers/orderer.bclan/tls/:/etc/hyperledger/tls
+        - ./infra/dev/fabric/config/:/etc/hyperledger/config
+        - ./infra/dev/fabric/crypto-config/ordererOrganizations/bclan/orderers/orderer.bclan/msp/:/etc/hyperledger/msp
+        - ./infra/dev/fabric/crypto-config/ordererOrganizations/bclan/orderers/orderer.bclan/tls/:/etc/hyperledger/tls
     networks:
       - bclannet
 
@@ -76,8 +76,8 @@ services:
       - 7053:7053
     volumes:
         - /var/run/:/host/var/run/
-        - ./infra/network-it/crypto-config/peerOrganizations/bc-coop.bclan/peers/peer0.bc-coop.bclan/msp:/etc/hyperledger/msp/
-        - ./infra/network-it/crypto-config/peerOrganizations/bc-coop.bclan/peers/peer0.bc-coop.bclan/tls:/etc/hyperledger/tls/
+        - ./infra/dev/fabric/crypto-config/peerOrganizations/bc-coop.bclan/peers/peer0.bc-coop.bclan/msp:/etc/hyperledger/msp/
+        - ./infra/dev/fabric/crypto-config/peerOrganizations/bc-coop.bclan/peers/peer0.bc-coop.bclan/tls:/etc/hyperledger/tls/
     networks:
       - bclannet
 
@@ -104,10 +104,10 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ./../../chaincode/:/opt/gopath/src/blockchain-coop/
-        - ./infra/network-it/util/:/opt/blockchain-coop/
-        - ./infra/network-it/crypto-config/peerOrganizations/${cli_ORGA}/users/${cli_USER}@${cli_ORGA}/:/etc/hyperledger/user/
-        - ./infra/network-it/crypto-config/ordererOrganizations/bclan/tlsca/:/etc/hyperledger/orderer/
-        - ./infra/network-it/config/:/etc/hyperledger/config/
+        - ./infra/dev/fabric/util/:/opt/blockchain-coop/
+        - ./infra/dev/fabric/crypto-config/peerOrganizations/${cli_ORGA}/users/${cli_USER}@${cli_ORGA}/:/etc/hyperledger/user/
+        - ./infra/dev/fabric/crypto-config/ordererOrganizations/bclan/tlsca/:/etc/hyperledger/orderer/
+        - ./infra/dev/fabric/config/:/etc/hyperledger/config/
     networks:
         - bclannet
 
@@ -134,10 +134,10 @@ services:
     volumes:
       - /var/run/:/host/var/run/
       - ./../../chaincode/:/opt/gopath/src/blockchain-coop/
-      - ./infra/network-it/util/:/opt/blockchain-coop/
-      - ./infra/network-it/crypto-config/peerOrganizations/${cli_ORGA}/users/${cli_USER}@${cli_ORGA}/:/etc/hyperledger/user/
-      - ./infra/network-it/crypto-config/ordererOrganizations/bclan/tlsca/:/etc/hyperledger/orderer/
-      - ./infra/network-it/config/:/etc/hyperledger/config/
+      - ./infra/dev/fabric/util/:/opt/blockchain-coop/
+      - ./infra/dev/fabric/crypto-config/peerOrganizations/${cli_ORGA}/users/${cli_USER}@${cli_ORGA}/:/etc/hyperledger/user/
+      - ./infra/dev/fabric/crypto-config/ordererOrganizations/bclan/tlsca/:/etc/hyperledger/orderer/
+      - ./infra/dev/fabric/config/:/etc/hyperledger/config/
     networks:
       - bclannet
 
@@ -153,8 +153,8 @@ services:
       - coop_config_crypto=file:/opt/rest-coop
       - coop_endorsers=${coop_endorsers}
     volumes:
-      - ./infra/network-it/config.json:/opt/rest-coop/config.json
-      - ./infra/network-it/crypto-config:/opt/rest-coop/crypto-config
+      - ./infra/dev/fabric/config.json:/opt/rest-coop/config.json
+      - ./infra/dev/fabric/crypto-config:/opt/rest-coop/crypto-config
     ports:
       - 9090:9090
     networks:

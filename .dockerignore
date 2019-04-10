@@ -1,3 +1,7 @@
 deploy
 gradle*
 .idea
+infra/bc1
+.env
+docker-compose*
+makefile

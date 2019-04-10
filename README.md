@@ -25,7 +25,7 @@ docker-compose -f docker-compose-it.yaml up -d
 Rest api use ssm with docstampr
 
 ```
-make build tag-latest push -e VERSION=0.1.0
+make build tag-latest push -e VERSION=0.1.0  --always-make
 ```
 
 ## Release process

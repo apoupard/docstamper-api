@@ -6,13 +6,16 @@ ssm:
   signer:
     admin:
       name: adam
-      file: file:../infra/network-it/util/adam
+      file: file:../infra/dev/user/adam
     user:
       name: bob
-      file: file:../infra/network-it/util/bob
+      file: file:../infra/dev/user/bob
+
 docstampr:
   git:
-    repo: file:../infra/civis-docstampr-file
+    repo: file:../infra/dev/git/docstampr-file
     key: file:../infra/bc1/id_rsa.civis.github
+    push: false
+
 server:
   port : 8889
