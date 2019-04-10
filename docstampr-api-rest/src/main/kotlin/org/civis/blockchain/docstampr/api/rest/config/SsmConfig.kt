@@ -13,6 +13,9 @@ class SsmConfig {
     @Value("\${docstampr.git.key}")
     lateinit var docstamprGitKey: String
 
+    @Value("\${docstampr.git.push}")
+    var pushGitBranch: Boolean = true
+
     @Value("\${ssm.coop.rest.url}")
     lateinit var coopRestUrl: String
 

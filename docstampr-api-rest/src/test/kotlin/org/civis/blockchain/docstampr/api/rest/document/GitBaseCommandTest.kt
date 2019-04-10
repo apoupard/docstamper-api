@@ -7,18 +7,22 @@ import java.util.*
 
 class GitBaseCommandTest {
 
-    val repo = "file:../infra/civis-docstampr-file"
-    val key = "file:../infra/bc1/id_rsa.civis.github"
+    companion object {
+        val REPO = "file:../infra/dev/git/docstampr-file"
+        val KEY = ""
+        val git = GitBaseCommand(GitBaseCommandTest.REPO, GitBaseCommandTest.KEY)
+    }
 
     @Test
     fun test_addFile() {
+        git.checkoutBranch("master")
         val uuid = UUID.randomUUID().toString()
         val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
         System.out.println(file.absoluteFile)
-        GitBaseCommand(repo, key).checkoutBranch(uuid)
-        GitBaseCommand(repo, key).commitFile(file.name, file.inputStream())
-        GitBaseCommand(repo, key).pushBranch()
-        GitBaseCommand(repo, key).checkoutBranch("master")
+        git.checkoutBranch(uuid)
+        git.commitFile(file.name, file.inputStream())
+//        GitBaseCommand(GitBaseCommandTest.REPO, GitBaseCommandTest.KEY).pushBranch()
+        git.checkoutBranch("master")
     }
 
 }

@@ -37,10 +37,13 @@ class HashCommand(val hashQuery: HashQuery,
         return ssmClient.perform(ssmConfig.userSigner(), "SetMetadata", context)
     }
 
-    private fun uploadToGit(metadata: HashApi.UploadForm, hash: String): String {
+    private fun uploadToGit(metadata: HashApi.UploadForm, hash: String): String? {
+        if(metadata.file == null) {
+            return null
+        }
         val file = File.createTempFile(metadata.file.filename(), ".temp")
         metadata.file.transferTo(file);
-        return GitUploadDocument(ssmConfig.docstamprGitRepo, ssmConfig.docstamprGitKey)
+        return GitUploadDocument(ssmConfig.docstamprGitRepo, ssmConfig.docstamprGitKey, ssmConfig.pushGitBranch)
                 .upload(hash, metadata.file.filename(), FileInputStream(file))
     }
 

@@ -6,16 +6,17 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.util.*
 
-internal class GitUploadDocumentTest {
+class GitUploadDocumentTest {
 
-    val repo = "file:../infra/civis-docstampr-file"
-    val key = "file:../infra/bc1/id_rsa.civis.github"
+    companion object {
+        val gitUploadDocument = GitUploadDocument(GitBaseCommandTest.REPO, GitBaseCommandTest.KEY, false)
+    }
 
     @Test
     fun test_addFile() {
         val uuid = UUID.randomUUID().toString()
         val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
-        val url = GitUploadDocument(repo, key).upload(uuid, file.name, file.inputStream())
+        val url = gitUploadDocument.upload(uuid, file.name, file.inputStream())
         Assertions.assertThat(url)
                 .isEqualTo("https://raw.githubusercontent.com/civis-blockchain/docstampr-file/$uuid/fileToCommit.txt")
     }
