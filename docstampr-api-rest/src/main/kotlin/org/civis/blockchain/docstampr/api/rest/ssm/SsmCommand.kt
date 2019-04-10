@@ -40,7 +40,7 @@ class SsmCommand(val ssmClient: SsmClient,
 
     private fun getWorkflow(): Ssm {
         return Ssm(ssmConfig.ssmName, listOf(
-                Ssm.Transition(0, 1, "DocStampr", "SetMetadata")
+                Ssm.Transition(0, 0, "DocStampr", "SetMetadata")
         ))
     }
 

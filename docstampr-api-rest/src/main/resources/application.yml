@@ -1,5 +1,5 @@
 ssm:
-  name: docstampr
+  name: docstampr-loop
   coop:
     rest:
       url: http://localhost:9090
