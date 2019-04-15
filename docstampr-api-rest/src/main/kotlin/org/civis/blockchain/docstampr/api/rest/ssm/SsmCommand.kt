@@ -1,16 +1,19 @@
 package org.civis.blockchain.docstampr.api.rest.ssm
 
-import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.rest.config.DocstamperConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.domain.Agent
+import org.civis.blockchain.ssm.client.domain.SignerAdmin
 import org.civis.blockchain.ssm.client.domain.Ssm
+import org.civis.blockchain.ssm.client.spring.SsmConfiguration
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @Service
 class SsmCommand(val ssmClient: SsmClient,
-                 val ssmConfig: SsmConfig) {
+                 val docstamperConfig: DocstamperConfig,
+                 val signerAdmin: SignerAdmin) {
 
     fun init(): CompletableFuture<Optional<Ssm>> {
         return initUser().thenApply {
@@ -27,38 +30,41 @@ class SsmCommand(val ssmClient: SsmClient,
     }
 
     private fun getSsm(): CompletableFuture<Optional<Ssm>> {
-        return ssmClient.getSsm(ssmConfig.ssmName)
+        return ssmClient.getSsm(docstamperConfig.ssmName)
     }
 
     private fun createSsm(): CompletableFuture<Optional<Ssm>> {
-        val admin = ssmConfig.adminSigner()
+
         val ssm = getWorkflow()
-        return ssmClient.create(admin, ssm).thenApply {
+        return ssmClient.create(signerAdmin, ssm).thenApply {
             getSsm().get();
         }
     }
 
     private fun getWorkflow(): Ssm {
-        return Ssm(ssmConfig.ssmName, listOf(
+        return Ssm(docstamperConfig.ssmName, listOf(
                 Ssm.Transition(0, 0, "DocStampr", "SetMetadata")
         ))
     }
 
     private fun getUser(): CompletableFuture<Optional<Agent>> {
-        return ssmClient.getAgent(ssmConfig.signerUserName)
+        return ssmClient.getAgent(docstamperConfig.signerUserName)
     }
 
     private fun createUser(): CompletableFuture<Optional<Agent>> {
-        val admin = ssmConfig.adminSigner()
-        val agent = Agent.loadFromFile(ssmConfig.signerUserName, ssmConfig.signerUserFile);
-        return ssmClient.registerUser(admin, agent).thenApply {
+        val agent = Agent.loadFromFile(docstamperConfig.signerUserName, docstamperConfig.signerUserFile);
+        return ssmClient.registerUser(signerAdmin, agent).thenApply {
             getUser().get();
         }
     }
 
     private fun <T> createIfNotExist(get: () -> CompletableFuture<Optional<T>>, create: () -> CompletableFuture<Optional<T>>): CompletableFuture<Optional<T>> {
         return get().thenApply {
-            it.or { create().get() }
+            if (it.isPresent) {
+                it
+            } else {
+                create().get()
+            }
         }
     }
 

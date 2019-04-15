@@ -1,6 +1,6 @@
 package org.civis.blockchain.docstampr.api.rest.hash
 
-import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.rest.config.DocstamperConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.domain.SessionState
 import org.springframework.stereotype.Service
@@ -9,11 +9,11 @@ import java.util.concurrent.CompletableFuture
 
 @Service
 class HashQuery(val ssmClient: SsmClient,
-                val ssmConfig: SsmConfig) {
+                val docstamperConfig: DocstamperConfig) {
 
     fun list(): CompletableFuture<List<String>> {
         return ssmClient.listSession().thenApply { sessions ->
-            sessions.filter(ssmNameFilter(ssmConfig.ssmName))
+            sessions.filter(ssmNameFilter(docstamperConfig.ssmName))
         }
     }
 

@@ -3,12 +3,14 @@ package org.civis.blockchain.docstampr.api.rest.hash
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.civis.blockchain.docstampr.api.document.GitUploadDocument
 import org.civis.blockchain.docstampr.api.rest.HashApi
-import org.civis.blockchain.docstampr.api.rest.config.SsmConfig
+import org.civis.blockchain.docstampr.api.rest.config.DocstamperConfig
 import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.Utils.JsonUtils
 import org.civis.blockchain.ssm.client.domain.Context
 import org.civis.blockchain.ssm.client.domain.Session
+import org.civis.blockchain.ssm.client.domain.SignerAdmin
 import org.civis.blockchain.ssm.client.repository.InvokeReturn
+import org.civis.blockchain.ssm.client.spring.SsmConfiguration
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import java.io.File
@@ -20,24 +22,23 @@ import java.util.concurrent.CompletableFuture
 @Service
 class HashCommand(val hashQuery: HashQuery,
                   val ssmClient: SsmClient,
-                  val ssmConfig: SsmConfig) {
+                  val docstamperConfig: DocstamperConfig,
+                  val signerAdmin: SignerAdmin) {
 
     fun create(hash: String): CompletableFuture<InvokeReturn>? {
         val hashPosed = hashQuery.find(hash).get()
         if (hashPosed.isPresent) {
             return null;
         }
-        val roles = hashMapOf(ssmConfig.userSigner().name to "DocStampr")
-        val session = Session(ssmConfig.ssmName, hash, "", roles)
-        return ssmClient.start(ssmConfig.adminSigner(), session)
+        val roles = hashMapOf(docstamperConfig.userSigner().name to "DocStampr")
+        val session = Session(docstamperConfig.ssmName, hash, "", roles)
+        return ssmClient.start(signerAdmin, session)
     }
 
     fun addMetadata(hash: String, @RequestBody form: HashApi.UploadForm): CompletableFuture<InvokeReturn> {
-            val session = ssmClient.getSession(hash).get()
-
         val url = uploadToGit(form, hash)
         val context = buildContext(form, url, hash)
-        return ssmClient.perform(ssmConfig.userSigner(), "SetMetadata", context)
+        return ssmClient.perform(docstamperConfig.userSigner(), "SetMetadata", context)
     }
 
     private fun buildContext(form: HashApi.UploadForm, url: String?, hash: String): Context {
@@ -61,15 +62,15 @@ class HashCommand(val hashQuery: HashQuery,
         val file = File.createTempFile(metadata.file.filename(), ".temp")
         try {
             metadata.file.transferTo(file);
-            return GitUploadDocument(ssmConfig.docstamprGitRepo, ssmConfig.docstamprGitKey, ssmConfig.pushGitBranch)
+            return GitUploadDocument(docstamperConfig.docstamprGitRepo, docstamperConfig.docstamprGitKey, docstamperConfig.pushGitBranch)
                     .upload(hash, metadata.file.filename(), FileInputStream(file))
         } finally {
             file.delete();
         }
     }
 
-    private fun getIteration(session: String): Int {
-        val session = ssmClient.getSession(session).get();
+    private fun getIteration(sessionId: String): Int {
+        val session = ssmClient.getSession(sessionId).get();
         return session.map { it.iteration }.orElse(0)
     }
 
