@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture
 class HashCommand(val hashQuery: HashQuery,
                   val ssmClient: SsmClient,
                   val docstamperConfig: DocstamperConfig,
+                  val gitUploadDocument: GitUploadDocument,
                   val signerAdmin: SignerAdmin) {
 
     fun create(hash: String): CompletableFuture<InvokeReturn>? {
@@ -62,8 +63,7 @@ class HashCommand(val hashQuery: HashQuery,
         }
         val file = toTempFile(metadata.file)
         try {
-            return GitUploadDocument(docstamperConfig.docstamprGitRepo, docstamperConfig.docstamprGitKey, docstamperConfig.pushGitBranch)
-                    .upload(hash, metadata.file.filename(), FileInputStream(file))
+            return gitUploadDocument.upload(hash, metadata.file.filename(), FileInputStream(file))
         } finally {
             file.delete();
         }
