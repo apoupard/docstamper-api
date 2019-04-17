@@ -4,6 +4,8 @@ import com.google.common.io.ByteStreams
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
+import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
+import org.civis.blockchain.docstampr.api.rest.document.GitException
 import org.civis.blockchain.ssm.client.Utils.FileUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ListBranchCommand.ListMode
@@ -14,9 +16,8 @@ import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.SshTransport
 import org.eclipse.jgit.transport.Transport
 import org.eclipse.jgit.util.FS
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
+import javax.crypto.SecretKey
 
 
 class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
@@ -72,11 +73,30 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
         }
     }
 
-    fun commitFile(file: String, data: InputStream) {
-        val myFile = File(repo.repository.workTree.absolutePath, file)
-        ByteStreams.copy(data,  FileOutputStream(myFile))
-        repo.add().addFilepattern(file).call();
-        repo.commit().setMessage("Add "+file).call();
+    fun createEmptyFile(fileName: String): OutputStream {
+        val fileToCreate = File(repo.repository.workTree.absolutePath, fileName)
+        if(fileToCreate.exists()) {
+            throw GitException("File "+fileName+" already exists");
+        }
+        fileToCreate.createNewFile();
+        return FileOutputStream(fileToCreate)
+    }
+
+    fun createFile(filename: String, data: InputStream) {
+        createEmptyFile(filename).use { file ->
+            ByteStreams.copy(data,  file)
+        }
+    }
+
+    fun createFile(filename: String, data: FileInputStream, encryptKey: SecretKey) {
+        createEmptyFile(filename).use { file ->
+            AESCipher().encrypt(encryptKey, data, file)
+        }
+    }
+
+    fun commitFile(filename: String) {
+        repo.add().addFilepattern(filename).call();
+        repo.commit().setMessage("Add "+filename).call();
     }
 
     fun pushBranch() {

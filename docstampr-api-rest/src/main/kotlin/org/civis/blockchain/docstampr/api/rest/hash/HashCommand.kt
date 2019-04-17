@@ -11,6 +11,7 @@ import org.civis.blockchain.ssm.client.domain.Session
 import org.civis.blockchain.ssm.client.domain.SignerAdmin
 import org.civis.blockchain.ssm.client.repository.InvokeReturn
 import org.civis.blockchain.ssm.client.spring.SsmConfiguration
+import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import java.io.File
@@ -59,14 +60,19 @@ class HashCommand(val hashQuery: HashQuery,
         if (metadata.file == null) {
             return null
         }
-        val file = File.createTempFile(metadata.file.filename(), ".temp")
+        val file = toTempFile(metadata.file)
         try {
-            metadata.file.transferTo(file);
             return GitUploadDocument(docstamperConfig.docstamprGitRepo, docstamperConfig.docstamprGitKey, docstamperConfig.pushGitBranch)
                     .upload(hash, metadata.file.filename(), FileInputStream(file))
         } finally {
             file.delete();
         }
+    }
+
+    private fun toTempFile(file: FilePart): File {
+        val tmpFile = File.createTempFile(file.filename(), ".temp")
+        file.transferTo(tmpFile);
+        return tmpFile;
     }
 
     private fun getIteration(sessionId: String): Int {

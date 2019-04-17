@@ -18,6 +18,6 @@ class GitUploadDocumentTest {
         val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
         val url = gitUploadDocument.upload(uuid, file.name, file.inputStream())
         Assertions.assertThat(url)
-                .isEqualTo("https://raw.githubusercontent.com/civis-blockchain/docstampr-file/$uuid/fileToCommit.txt")
+                .isEqualTo("https://raw.githubusercontent.com/civis-blockchain/docstampr-file/$uuid/fileToCommit.txt.encrypted")
     }
 }

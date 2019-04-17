@@ -1,5 +1,6 @@
 package org.civis.blockchain.docstampr.api.document
 
+import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
 import org.civis.blockchain.ssm.client.Utils.FileUtils
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -14,14 +15,31 @@ class GitBaseCommandTest {
     }
 
     @Test
-    fun test_addFile() {
-        git.checkoutBranch("master")
+    fun test_commitFile() {
         val uuid = UUID.randomUUID().toString()
         val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
-        System.out.println(file.absoluteFile)
+
+        git.checkoutBranch("master")
         git.checkoutBranch(uuid)
-        git.commitFile(file.name, file.inputStream())
-//        GitBaseCommand(GitBaseCommandTest.REPO, GitBaseCommandTest.KEY).pushBranch()
+
+        git.createFile(file.name, file.inputStream())
+        git.commitFile(file.name)
+
+        git.checkoutBranch("master")
+    }
+
+    @Test
+    fun test_commitEncryptedFile() {
+        val uuid = UUID.randomUUID().toString()
+        val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
+
+        git.checkoutBranch("master")
+        git.checkoutBranch(uuid)
+
+        git.createFile("fileToCommit.txt.enc", file.inputStream(), AESCipher().generateSecretKey())
+
+        git.commitFile("fileToCommit.txt.enc")
+
         git.checkoutBranch("master")
     }
 
