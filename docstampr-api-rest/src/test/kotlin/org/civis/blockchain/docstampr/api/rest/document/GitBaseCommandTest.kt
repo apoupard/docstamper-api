@@ -1,4 +1,4 @@
-package org.civis.blockchain.docstampr.api.document
+package org.civis.blockchain.docstampr.api.rest.document
 
 import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
 import org.civis.blockchain.ssm.client.Utils.FileUtils
@@ -9,9 +9,9 @@ import java.util.*
 class GitBaseCommandTest {
 
     companion object {
-        val REPO = "file:../infra/dev/git/docstampr-file"
-        val KEY = ""
-        val git = GitBaseCommand(GitBaseCommandTest.REPO, GitBaseCommandTest.KEY)
+        const val REPO = "file:../infra/dev/git/docstampr-file"
+        const val KEY = ""
+        val git = GitBaseCommand(REPO, KEY)
     }
 
     @Test

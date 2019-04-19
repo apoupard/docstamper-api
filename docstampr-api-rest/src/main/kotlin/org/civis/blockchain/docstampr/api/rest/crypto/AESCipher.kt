@@ -15,8 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 
 class AESCipher {
 
-    val ALGO = "AES"
-    private val logger = LoggerFactory.getLogger(AESCipher::class.java)
+    private val ALGO = "AES"
 
     @Throws(NoSuchAlgorithmException::class)
     fun generateSecretKey(): SecretKey {
@@ -62,8 +61,17 @@ class AESCipher {
 
     }
 
+    fun decrypt(fileInput: InputStream, key: SecretKey): InputStream {
+        try {
+            return getDecryptCipher(key, fileInput)
+        } catch (e: Exception) {
+            throw CryptoException("Error decrypting file", e)
+        }
+
+    }
+
     @Throws(NoSuchAlgorithmException::class, NoSuchPaddingException::class, InvalidKeyException::class)
-    private fun getDecryptCipher(key: SecretKey, fileInput: FileInputStream): CipherInputStream {
+    private fun getDecryptCipher(key: SecretKey, fileInput: InputStream): CipherInputStream {
         val cipher = Cipher.getInstance(ALGO)
         cipher.init(Cipher.DECRYPT_MODE, key)
         return CipherInputStream(fileInput, cipher)

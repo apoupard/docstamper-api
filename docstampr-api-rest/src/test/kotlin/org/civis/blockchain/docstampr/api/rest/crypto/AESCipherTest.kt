@@ -53,7 +53,7 @@ class AESCipherTest {
     @Throws(NoSuchAlgorithmException::class)
     fun generateSecretKey() {
         val key = AESCipher().generateSecretKey()
-        val encodedKey = Base64.getEncoder().encodeToString(key.getEncoded())
+        val encodedKey = Base64.getEncoder().encodeToString(key.encoded)
         println(encodedKey)
         val keyBuilded = AESCipher().secretKeyFromBase64(encodedKey)
         Assertions.assertThat(key).isEqualToComparingFieldByField(keyBuilded)
