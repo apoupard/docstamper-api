@@ -2,8 +2,8 @@ package org.civis.blockchain.docstampr.api.rest.document
 
 import com.google.common.io.CharStreams
 import org.assertj.core.api.Assertions
-import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
 import org.civis.blockchain.ssm.client.Utils.FileUtils
+import org.civis.blockchain.ssm.client.crypto.AESCipher
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.InputStreamReader
@@ -19,14 +19,14 @@ class GitUploadDocumentTest {
     fun test_addFile() {
         val uuid = UUID.randomUUID().toString()
         val file = File(FileUtils.getUrl("fileToCommit.txt").toURI())
-        val url = gitUploadDocument.upload(uuid, file.name, file.inputStream(), AESCipher().generateSecretKey())
+        val url = gitUploadDocument.upload(uuid, file.name, file.inputStream(), AESCipher.generateSecretKey())
         Assertions.assertThat(url)
                 .isNotEmpty()
     }
 
     @Test
     fun test_getFile() {
-        val key = AESCipher().generateSecretKey()
+        val key = AESCipher.generateSecretKey()
         val uuid = UUID.randomUUID().toString()
         val filename = "fileToCommit.txt"
         val file = File(FileUtils.getUrl(filename).toURI())

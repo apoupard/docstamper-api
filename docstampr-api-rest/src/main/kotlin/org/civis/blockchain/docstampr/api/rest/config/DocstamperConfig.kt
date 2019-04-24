@@ -1,6 +1,6 @@
 package org.civis.blockchain.docstampr.api.rest.config
 
-import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
+import org.civis.blockchain.ssm.client.crypto.AESCipher
 import org.civis.blockchain.ssm.client.domain.Signer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
@@ -35,7 +35,7 @@ class DocstamperConfig {
     }
 
     fun aesSecretKey(): SecretKey {
-        return AESCipher().secretKeyFromBase64(docstamprAesKey)
+        return AESCipher.secretKeyFromBase64(docstamprAesKey)
     }
 
 

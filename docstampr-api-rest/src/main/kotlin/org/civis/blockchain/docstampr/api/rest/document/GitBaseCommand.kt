@@ -4,9 +4,9 @@ import com.google.common.io.ByteStreams
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
-import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
 import org.civis.blockchain.docstampr.api.rest.exception.GitException
 import org.civis.blockchain.ssm.client.Utils.FileUtils
+import org.civis.blockchain.ssm.client.crypto.AESCipher
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ListBranchCommand.ListMode
 import org.eclipse.jgit.revwalk.RevCommit
@@ -30,7 +30,6 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
     }
 
     fun listBranch() {
-
         repo.use { git ->
             var call = git.branchList().call()
             for (ref in call) {
@@ -89,7 +88,7 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
 
     fun createFile(filename: String, data: FileInputStream, encryptKey: SecretKey) {
         createEmptyFile(filename).use { file ->
-            AESCipher().encrypt(encryptKey, data, file)
+            AESCipher.encrypt(data, file, encryptKey)
         }
     }
 
@@ -98,7 +97,7 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
         if(!file.exists()) {
             throw GitException("File $file not exists")
         }
-        return AESCipher().decrypt(file.inputStream(), encryptKey)
+        return AESCipher.decrypt(file.inputStream(), encryptKey)
     }
 
     fun commitFile(filename: String): RevCommit {

@@ -14,7 +14,7 @@ apply plugin: 'io.spring.dependency-management'
 ext {
     okhttpVersion = '3.14.0'
     retrofitVersion = '2.5.0'
-    ssmVersion = '0.5.2'
+    ssmVersion = '0.5.3-SNAPSHOT'
 }
 
 dependencies {

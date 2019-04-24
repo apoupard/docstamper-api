@@ -1,7 +1,7 @@
 package org.civis.blockchain.docstampr.api.rest.document
 
-import org.civis.blockchain.docstampr.api.rest.crypto.AESCipher
 import org.civis.blockchain.ssm.client.Utils.FileUtils
+import org.civis.blockchain.ssm.client.crypto.AESCipher
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.util.*
@@ -36,7 +36,7 @@ class GitBaseCommandTest {
         git.checkoutBranch("master")
         git.checkoutBranch(uuid)
 
-        git.createFile("fileToCommit.txt.enc", file.inputStream(), AESCipher().generateSecretKey())
+        git.createFile("fileToCommit.txt.enc", file.inputStream(), AESCipher.generateSecretKey())
 
         git.commitFile("fileToCommit.txt.enc")
 

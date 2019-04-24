@@ -19,11 +19,11 @@ fun addMetadata(publicMessage: String, filePart: FilePart, commitId: String?): S
 }
 
 fun SessionState.getFilename(): String {
-    val json = JsonUtils.toObject(this.publicMessage, jacksonTypeRef<HashMap<String, String>>())
+    val json = JsonUtils.toObject(this.public, jacksonTypeRef<HashMap<String, String>>())
     return json["filename"] ?: "filename"
 }
 
 fun SessionState.getContentType(): String {
-    val json = JsonUtils.toObject(this.publicMessage, jacksonTypeRef<HashMap<String, String>>())
+    val json = JsonUtils.toObject(this.public, jacksonTypeRef<HashMap<String, String>>())
     return json["contentType"] ?: "application/octet-stream"
 }
