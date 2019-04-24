@@ -18,12 +18,18 @@ fun addMetadata(publicMessage: String, filePart: FilePart, commitId: String?): S
     return JsonUtils.toJson(json).orEmpty()
 }
 
-fun SessionState.getFilename(): String {
+fun SessionState.getFilename(): String? {
+    if(this.public == null) {
+        return null;
+    }
     val json = JsonUtils.toObject(this.public, jacksonTypeRef<HashMap<String, String>>())
-    return json["filename"] ?: "filename"
+    return json["filename"]
 }
 
-fun SessionState.getContentType(): String {
+fun SessionState.getContentType(): String? {
+    if(this.public == null) {
+        return null;
+    }
     val json = JsonUtils.toObject(this.public, jacksonTypeRef<HashMap<String, String>>())
-    return json["contentType"] ?: "application/octet-stream"
+    return json["contentType"]
 }

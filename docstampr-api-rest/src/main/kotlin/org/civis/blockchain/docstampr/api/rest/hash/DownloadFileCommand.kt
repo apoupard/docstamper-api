@@ -24,10 +24,12 @@ class DownloadFileCommand(val hashQuery: HashQuery,
 
     private fun fromGit(opt: Optional<SessionState>, hash: String): HashApi.HashFileResponse {
         val session: SessionState = opt.orElseThrow {
-            NotFoundException("$hash not found")
+            throw NotFoundException("$hash not found")
         }
         val filename = session.getFilename()
+                ?: throw NotFoundException("$hash don't have file linked")
         val contentType = session.getContentType()
+                ?: "application/octet-stream"
         val res = InputStreamResource(gitUploadDocument.get(hash, filename, docstamperConfig.aesSecretKey()))
         return HashApi.HashFileResponse(filename, res, contentType)
 
