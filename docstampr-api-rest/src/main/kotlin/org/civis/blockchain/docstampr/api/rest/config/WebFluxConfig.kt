@@ -20,7 +20,7 @@ class WebFluxConfig : WebFluxConfigurer {
     override fun addCorsMappings(corsRegistry: CorsRegistry) {
         corsRegistry.addMapping("/**")
                 .allowedOrigins("*")
-                .maxAge(3600);
+                .maxAge(3600)
     }
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {

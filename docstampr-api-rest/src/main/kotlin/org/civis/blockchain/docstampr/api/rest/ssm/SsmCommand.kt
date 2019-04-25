@@ -5,7 +5,6 @@ import org.civis.blockchain.ssm.client.SsmClient
 import org.civis.blockchain.ssm.client.domain.Agent
 import org.civis.blockchain.ssm.client.domain.SignerAdmin
 import org.civis.blockchain.ssm.client.domain.Ssm
-import org.civis.blockchain.ssm.client.spring.SsmConfiguration
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -37,7 +36,7 @@ class SsmCommand(val ssmClient: SsmClient,
 
         val ssm = getWorkflow()
         return ssmClient.create(signerAdmin, ssm).thenApply {
-            getSsm().get();
+            getSsm().get()
         }
     }
 
@@ -52,9 +51,9 @@ class SsmCommand(val ssmClient: SsmClient,
     }
 
     private fun createUser(): CompletableFuture<Optional<Agent>> {
-        val agent = Agent.loadFromFile(docstamperConfig.signerUserName, docstamperConfig.signerUserFile);
+        val agent = Agent.loadFromFile(docstamperConfig.signerUserName, docstamperConfig.signerUserFile)
         return ssmClient.registerUser(signerAdmin, agent).thenApply {
-            getUser().get();
+            getUser().get()
         }
     }
 

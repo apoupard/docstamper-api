@@ -15,6 +15,8 @@ docstampr:
     repo: file:./infra/dev/git/docstampr-file
     key: file:./infra/bc1/id_rsa.civis.github
     push: false
+  aes:
+    key: "+cRaRuaSK1/RObE9oEOm6Q=="
 
 server:
   port: 8889

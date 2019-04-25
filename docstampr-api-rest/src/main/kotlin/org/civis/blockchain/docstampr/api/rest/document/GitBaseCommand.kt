@@ -1,22 +1,22 @@
-package org.civis.blockchain.docstampr.api.document
+package org.civis.blockchain.docstampr.api.rest.document
 
 import com.google.common.io.ByteStreams
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
+import org.civis.blockchain.docstampr.api.rest.exception.GitException
 import org.civis.blockchain.ssm.client.Utils.FileUtils
+import org.civis.blockchain.ssm.client.crypto.AESCipher
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ListBranchCommand.ListMode
-import org.eclipse.jgit.api.TransportConfigCallback
+import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.OpenSshConfig.Host
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.SshTransport
-import org.eclipse.jgit.transport.Transport
 import org.eclipse.jgit.util.FS
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
+import javax.crypto.SecretKey
 
 
 class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
@@ -30,7 +30,6 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
     }
 
     fun listBranch() {
-
         repo.use { git ->
             var call = git.branchList().call()
             for (ref in call) {
@@ -47,7 +46,7 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
 
     fun existBranch(name: String): Boolean {
         for (ref in repo.branchList().call()) {
-            if (ref.name.equals("refs/heads/"+name)) {
+            if (ref.name.equals("refs/heads/$name")) {
                 return true
             }
         }
@@ -72,22 +71,47 @@ class GitBaseCommand(docstamprGitRepo: String, keyGitRepo: String) {
         }
     }
 
-    fun commitFile(file: String, data: InputStream) {
-        val myFile = File(repo.repository.workTree.absolutePath, file)
-        ByteStreams.copy(data,  FileOutputStream(myFile))
-        repo.add().addFilepattern(file).call();
-        repo.commit().setMessage("Add "+file).call();
+    fun createEmptyFile(fileName: String): OutputStream {
+        val fileToCreate = File(repo.repository.workTree.absolutePath, fileName)
+        if(fileToCreate.exists()) {
+            throw GitException("File $fileName already exists")
+        }
+        fileToCreate.createNewFile()
+        return FileOutputStream(fileToCreate)
+    }
+
+    fun createFile(filename: String, data: InputStream) {
+        createEmptyFile(filename).use { file ->
+            ByteStreams.copy(data,  file)
+        }
+    }
+
+    fun createFile(filename: String, data: FileInputStream, encryptKey: SecretKey) {
+        createEmptyFile(filename).use { file ->
+            AESCipher.encrypt(data, file, encryptKey)
+        }
+    }
+
+    fun getFile(filename: String, encryptKey: SecretKey): InputStream {
+        val file = File(repo.repository.workTree.absolutePath, filename)
+        if(!file.exists()) {
+            throw GitException("File $file not exists")
+        }
+        return AESCipher.decrypt(file.inputStream(), encryptKey)
+    }
+
+    fun commitFile(filename: String): RevCommit {
+        repo.add().addFilepattern(filename).call()
+        return repo.commit().setMessage("Add $filename").call()
     }
 
     fun pushBranch() {
         repo.push()
                 .setRemote("origin")
-                .setTransportConfigCallback(object : TransportConfigCallback {
-                    override fun configure(transport: Transport) {
-                        val sshTransport = transport as SshTransport
-                        sshTransport.sshSessionFactory = sshSessionFactory
-                    }
-                })
+                .setTransportConfigCallback { transport ->
+                    val sshTransport = transport as SshTransport
+                    sshTransport.sshSessionFactory = sshSessionFactory
+                }
                 .call()
     }
 
