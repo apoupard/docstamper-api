@@ -43,4 +43,11 @@ class GitBaseCommandTest {
         git.checkoutBranch("master")
     }
 
+    @Test
+    fun tt() {
+        val enc = AESCipher.generateSecretKey().encoded
+        val benc = Base64.getEncoder().encodeToString(enc)
+        System.out.println(benc)
+    }
+
 }

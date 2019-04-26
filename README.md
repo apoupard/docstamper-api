@@ -31,6 +31,9 @@ make build tag-latest push -e VERSION=0.1.0  --always-make
 ## Release process
 
 ```
-git tag -a 0.1.0 -m "First version"
-git checkout 0.1.0
+DOCSTAMPR_VERSION=0.2.0
+git tag -a $DOCSTAMPR_VERSION -m "${VERSION_SSM} version"
+git checkout $DOCSTAMPR_VERSION
+make build tag-latest push -e VERSION=$DOCSTAMPR_VERSION  --always-make
+git push origin $DOCSTAMPR_VERSION
 ```
